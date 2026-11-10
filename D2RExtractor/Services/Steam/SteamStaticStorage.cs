@@ -183,7 +183,7 @@ internal sealed class SteamStaticStorage : IDisposable
     }
 
     /// <summary>Converts a text-ROOT path to the backslash-separated virtual path form.</summary>
-    internal static string ToVirtualPath(string rootPath) => rootPath.Replace('/', '\\').ToLowerInvariant();
+    internal static string ToVirtualPath(string rootPath) => rootPath.Replace('/', '\\');
 
     /// <summary>
     /// Extracts the second <c>|</c>-delimited field of a text-ROOT record — a 32-char hex digest —
