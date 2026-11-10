@@ -9,6 +9,8 @@
     <AssemblyName>d2rextract</AssemblyName>
     <RootNamespace>D2RExtractor.Cli</RootNamespace>
     <Version>1.1.8</Version>
+    <!-- Drops the runtime's dependency on libicu, which SteamOS is not guaranteed to provide. -->
+    <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
   <!-- The extraction engine, compiled in place from the WPF app so the two cannot drift apart. -->
