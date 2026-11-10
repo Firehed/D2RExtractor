@@ -349,7 +349,7 @@ public class CascExtractorService
                 ct.ThrowIfCancellationRequested();
 
                 string fsRelPath = StripCascNamespace(file.VirtualPath);
-                string destPath = Path.Combine(outputPath, fsRelPath);
+                string destPath = ExtractedPaths.ToDisk(outputPath, fsRelPath);
                 string? destDir = Path.GetDirectoryName(destPath);
                 if (destDir != null)
                     Directory.CreateDirectory(destDir);
@@ -534,7 +534,7 @@ public class CascExtractorService
                 // Everything cheap says this file is fine. Verification is what catches the cases
                 // the cheap checks structurally cannot see — a file corrupted or edited outside the
                 // app, whose size never changed — so it runs whether or not a recorded key matched.
-                string? actual = TryHashFile(Path.Combine(outputPath, relPath));
+                string? actual = TryHashFile(ExtractedPaths.ToDisk(outputPath, relPath));
                 verified++;
                 needsWrite = actual == null
                              || !string.Equals(actual, file.ContentKey, StringComparison.Ordinal);
@@ -608,7 +608,7 @@ public class CascExtractorService
         ManifestService.WriteAllEntries(target, manifest, finalEntries.Values);
 
         foreach (string prefix in TargetPrefixes)
-            RemoveEmptyDirectories(Path.Combine(outputPath, StripCascNamespace(prefix).TrimEnd('\\')), log);
+            RemoveEmptyDirectories(ExtractedPaths.ToDisk(outputPath, StripCascNamespace(prefix).TrimEnd('\\')), log);
 
         manifest.TotalBytesExtracted = finalEntries.Values.Sum(e => Math.Max(e.Size, 0));
         manifest.ExtractedAt = DateTime.UtcNow;
@@ -682,7 +682,7 @@ public class CascExtractorService
             if (bookkeeping.Contains(fi.FullName))
                 continue;
 
-            result[Path.GetRelativePath(outputPath, fi.FullName)] = fi.Length;
+            result[ExtractedPaths.FromDisk(outputPath, fi.FullName)] = fi.Length;
         }
         sw.Stop();
 
@@ -714,7 +714,7 @@ public class CascExtractorService
             ct.ThrowIfCancellationRequested();
             processed++;
 
-            string fullPath = Path.Combine(outputPath, relPath);
+            string fullPath = ExtractedPaths.ToDisk(outputPath, relPath);
             if (File.Exists(fullPath))
             {
                 try
@@ -801,7 +801,7 @@ public class CascExtractorService
         {
             ct.ThrowIfCancellationRequested();
 
-            string fullPath = Path.Combine(outputPath, entry.RelPath);
+            string fullPath = ExtractedPaths.ToDisk(outputPath, entry.RelPath);
             if (File.Exists(fullPath))
             {
                 try { File.Delete(fullPath); }
@@ -830,7 +830,7 @@ public class CascExtractorService
         foreach (string prefix in TargetPrefixes)
         {
             string fsPrefix = StripCascNamespace(prefix);
-            string dir = Path.Combine(outputPath, fsPrefix.TrimEnd('\\'));
+            string dir = ExtractedPaths.ToDisk(outputPath, fsPrefix.TrimEnd('\\'));
             RemoveEmptyDirectories(dir, log);
         }
         // Also clean up any old-style locales\ directory from pre-v1.1.4 extractions.

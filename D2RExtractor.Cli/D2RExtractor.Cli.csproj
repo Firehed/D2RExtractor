@@ -16,6 +16,7 @@
     <Compile Include="..\D2RExtractor\Models\**\*.cs" LinkBase="Engine\Models" />
     <Compile Include="..\D2RExtractor\Native\**\*.cs" LinkBase="Engine\Native" />
     <Compile Include="..\D2RExtractor\Services\CascExtractorService.cs" LinkBase="Engine\Services" />
+    <Compile Include="..\D2RExtractor\Services\ExtractedPaths.cs" LinkBase="Engine\Services" />
     <Compile Include="..\D2RExtractor\Services\IExtractionBackend.cs" LinkBase="Engine\Services" />
     <Compile Include="..\D2RExtractor\Services\ManifestService.cs" LinkBase="Engine\Services" />
     <Compile Include="..\D2RExtractor\Services\Steam\**\*.cs" LinkBase="Engine\Services\Steam" />
