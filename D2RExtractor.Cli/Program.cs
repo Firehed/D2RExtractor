@@ -28,10 +28,7 @@ Console.CancelKeyPress += (_, e) =>
 
 // Progress redraws one line in place; log messages clear it first so the two do not interleave.
 void Log(string message) => Console.WriteLine($"\r\x1b[K{message}");
-var progress = new Progress<ExtractionProgress>(p =>
-    Console.Write(p.TotalFiles > 0
-        ? $"\r\x1b[K{p.Phase} {p.FilesProcessed:N0}/{p.TotalFiles:N0}"
-        : $"\r\x1b[K{p.Phase}…"));
+var progress = new ConsoleProgress();
 
 var installation = new D2RInstallation { FolderPath = folder };
 var target = new ExtractionTarget { FolderPath = folder };
@@ -64,3 +61,15 @@ catch (Exception ex) when (ex is InvalidOperationException or IOException or Una
 }
 
 return 0;
+
+/// <summary>
+/// Reports on the calling thread. <see cref="Progress{T}"/> would post to the thread pool here,
+/// letting a stale progress line land after, or in the middle of, a log message.
+/// </summary>
+sealed class ConsoleProgress : IProgress<ExtractionProgress>
+{
+    public void Report(ExtractionProgress p) =>
+        Console.Write(p.TotalFiles > 0
+            ? $"\r\x1b[K{p.Phase} {p.FilesProcessed:N0}/{p.TotalFiles:N0}"
+            : $"\r\x1b[K{p.Phase}…");
+}
