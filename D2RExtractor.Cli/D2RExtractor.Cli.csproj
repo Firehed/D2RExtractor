@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AssemblyName>d2rextract</AssemblyName>
+    <RootNamespace>D2RExtractor.Cli</RootNamespace>
+    <Version>1.1.8</Version>
+  </PropertyGroup>
+
+  <!-- The extraction engine, compiled in place from the WPF app so the two cannot drift apart. -->
+  <ItemGroup>
+    <Compile Include="..\D2RExtractor\Models\**\*.cs" LinkBase="Engine\Models" />
+    <Compile Include="..\D2RExtractor\Native\**\*.cs" LinkBase="Engine\Native" />
+    <Compile Include="..\D2RExtractor\Services\CascExtractorService.cs" LinkBase="Engine\Services" />
+    <Compile Include="..\D2RExtractor\Services\IExtractionBackend.cs" LinkBase="Engine\Services" />
+    <Compile Include="..\D2RExtractor\Services\ManifestService.cs" LinkBase="Engine\Services" />
+    <Compile Include="..\D2RExtractor\Services\Steam\**\*.cs" LinkBase="Engine\Services\Steam" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="D2RExtractor.Cli.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+</Project>
