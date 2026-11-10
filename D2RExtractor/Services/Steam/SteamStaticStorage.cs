@@ -161,7 +161,7 @@ internal sealed class SteamStaticStorage : IDisposable
                 matched++;
                 corrected.Add(new Tvfs.FileEntry
                 {
-                    VirtualPath = path.Replace('/', '\\').ToLowerInvariant(),
+                    VirtualPath = ToVirtualPath(path),
                     Size = entry.Size,
                     Spans = entry.Spans,
                     ContentKey = ParseRootMd5(rawLine, bar, len),
@@ -181,6 +181,9 @@ internal sealed class SteamStaticStorage : IDisposable
                     (missed > 0 ? $", {missed:N0} unmatched." : "."));
         return corrected;
     }
+
+    /// <summary>Converts a text-ROOT path to the backslash-separated virtual path form.</summary>
+    internal static string ToVirtualPath(string rootPath) => rootPath.Replace('/', '\\').ToLowerInvariant();
 
     /// <summary>
     /// Extracts the second <c>|</c>-delimited field of a text-ROOT record — a 32-char hex digest —
