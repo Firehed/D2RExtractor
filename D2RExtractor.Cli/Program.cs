@@ -1,3 +1,4 @@
+using D2RExtractor.Cli;
 using D2RExtractor.Models;
 using D2RExtractor.Services;
 using D2RExtractor.Services.Steam;
@@ -46,6 +47,18 @@ try
     }
     else
     {
+        // The flag can only be set on an empty folder, so this is the one chance to apply it.
+        var created = CascExtractorService.ExtractedRootFolders
+            .Select(f => ExtractedPaths.ToDisk(folder, f))
+            .Where(p => !Directory.Exists(p))
+            .ToList();
+        if (created.Count > 0)
+        {
+            Log(created.Select(CaseInsensitiveFolder.TryCreate).ToList().All(flagged => flagged)
+                ? "Created case-insensitive output folders."
+                : "This filesystem cannot make case-insensitive folders; continuing without them.");
+        }
+
         service.Extract(installation, target, false, null, progress, Log, cts.Token);
     }
 }
