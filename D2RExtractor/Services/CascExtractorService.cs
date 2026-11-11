@@ -611,8 +611,8 @@ public class CascExtractorService
         // Now that every write has landed, replace the file list in one atomic pass.
         ManifestService.WriteAllEntries(target, manifest, finalEntries.Values);
 
-        foreach (string prefix in TargetPrefixes)
-            RemoveEmptyDirectories(ExtractedPaths.ToDisk(outputPath, StripCascNamespace(prefix).TrimEnd('\\')), log);
+        foreach (string folder in ExtractedRootFolders)
+            RemoveEmptyDirectories(ExtractedPaths.ToDisk(outputPath, folder), log);
 
         manifest.TotalBytesExtracted = finalEntries.Values.Sum(e => Math.Max(e.Size, 0));
         manifest.ExtractedAt = DateTime.UtcNow;
@@ -831,12 +831,8 @@ public class CascExtractorService
         // Remove now-empty directories under the data\ tree.
         // International files now extract into data\ (not locales\), so cleaning
         // the three target prefix directories covers everything.
-        foreach (string prefix in TargetPrefixes)
-        {
-            string fsPrefix = StripCascNamespace(prefix);
-            string dir = ExtractedPaths.ToDisk(outputPath, fsPrefix.TrimEnd('\\'));
-            RemoveEmptyDirectories(dir, log);
-        }
+        foreach (string folder in ExtractedRootFolders)
+            RemoveEmptyDirectories(ExtractedPaths.ToDisk(outputPath, folder), log);
         // Also clean up any old-style locales\ directory from pre-v1.1.4 extractions.
         string oldLocalesDir = Path.Combine(outputPath, "locales");
         RemoveEmptyDirectories(oldLocalesDir, log);
