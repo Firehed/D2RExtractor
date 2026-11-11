@@ -205,6 +205,33 @@ Press **Undo Extraction** and the extracted files are removed, empty folders
 pruned, and anything you put in that tree yourself left untouched. Then take
 `-direct -txt` back out of your launch options and D2R runs normally again.
 
+## Linux and Steam Deck
+
+A command-line build, `d2rextract`, runs on Linux, including SteamOS in Desktop Mode.
+It handles Steam installs only; Battle.net installs need a Windows-only library.
+
+Download `d2rextract-linux-x64.tar.gz` from the [releases page](../../releases), then:
+
+```sh
+tar -xzf d2rextract-linux-x64.tar.gz
+cd "<your D2R folder>"     # Steam → D2R → Manage → Browse local files
+~/d2rextract extract .     # extract, or update an existing extraction
+~/d2rextract undo .        # remove everything it extracted
+```
+
+Then add `-direct -txt` to D2R's launch options, as on Windows.
+Run `extract` again after each game patch; it only rewrites what changed.
+
+On a fresh extraction it makes the extracted folders case-insensitive where the filesystem allows it, as the Steam Deck's internal storage does.
+The game asks for many files in a different case than the archives record them, and under Proton each mismatch otherwise costs a scan of the whole folder.
+
+To build it yourself with the .NET 8 SDK, from any platform:
+
+```sh
+dotnet test D2RExtractor.Cli.Tests
+dotnet publish D2RExtractor.Cli -c Release -r linux-x64 -o out
+```
+
 ## The Support button
 
 Release builds carry a **Support** button in the app, between the version number
