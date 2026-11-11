@@ -81,6 +81,10 @@ public class CascExtractorService
         @"data:data\local\"
     };
 
+    /// <summary>The top-level folders every extracted file lands under, relative to the destination.</summary>
+    internal static IEnumerable<string> ExtractedRootFolders =>
+        TargetPrefixes.Select(p => StripCascNamespace(p).TrimEnd('\\'));
+
     /// <summary>
     /// Builds CASC virtual-path prefixes for the given language's locale files.
     /// Confirmed via CascDiagnostic: files live under two sub-prefixes:
