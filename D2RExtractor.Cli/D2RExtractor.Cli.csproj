@@ -13,6 +13,13 @@
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
+  <!-- Publishing for a platform yields one self-contained file: SteamOS cannot install a .NET runtime. -->
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' != ''">
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
   <!-- The extraction engine, compiled in place from the WPF app so the two cannot drift apart. -->
   <ItemGroup>
     <Compile Include="..\D2RExtractor\Models\**\*.cs" LinkBase="Engine\Models" />
